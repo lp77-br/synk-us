@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SynkUs - HTML5 Video Example</title>
+</head>
+<body style="background: #111; color: #fff; font-family: sans-serif; text-align: center; padding: 40px;">
+  <h2>SynkUs: HTML5 Video Adapter</h2>
+  <video id="video-el" width="640" height="360" controls muted style="border-radius: 8px;">
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+  </video>
+
+  <script type="module">
+    import { SyncEngine, SyncClock } from '../../packages/core/dist/index.esm.js';
+    import { HTML5SyncAdapter } from '../../adapters/html5/dist/index.esm.js';
+
+    const clock = new SyncClock();
+    const engine = new SyncEngine();
+    const video = document.getElementById('video-el');
+
+    const adapter = new HTML5SyncAdapter(video, engine, clock);
+
+    const targetUTC = clock.now();
+    engine.setState({
+      isPlaying: true,
+      anchorTimeMs: targetUTC,
+      pausedPositionSec: 0
+    });
+
+    adapter.schedulePlay(targetUTC);
+  </script>
+</body>
+</html>

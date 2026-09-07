@@ -1,0 +1,15 @@
+{
+  "name": "@synkus/adapter-html5",
+  "version": "0.1.0",
+  "description": "Native HTML5 Media timeline synchronization adapter",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@synkus/core": "*"
+  },
+  "author": "lp77-br",
+  "license": "MIT"
+}

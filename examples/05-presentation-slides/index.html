@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SynkUs - Synchronized Slide Deck</title>
+</head>
+<body style="background: #18181b; color: #f4f4f5; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+  <div style="background: #27272a; padding: 60px; border-radius: 16px; width: 480px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    <span style="font-size: 12px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 2px;">Slide Atual</span>
+    <h1 id="slide-title" style="font-size: 32px; margin: 16px 0;">Slide 1</h1>
+    <p id="slide-desc" style="color: #a1a1aa; font-size: 14px;">Introdução ao SynkUs Suite</p>
+  </div>
+
+  <script type="module">
+    import { SyncEngine, SyncClock } from '../../packages/core/dist/index.esm.js';
+    import { GenericSyncAdapter } from '../../adapters/generic/dist/index.esm.js';
+
+    const slides = [
+      { sec: 0, title: "Slide 1", desc: "Introdução ao SynkUs Suite" },
+      { sec: 5, title: "Slide 2", desc: "Matemática Determinística e Âncoras Absolutas" },
+      { sec: 10, title: "Slide 3", desc: "Adapters: YouTube, HTML5 e Generic" },
+      { sec: 15, title: "Slide 4", desc: "Conclusão e Próximos Passos" }
+    ];
+
+    const clock = new SyncClock();
+    const engine = new SyncEngine();
+
+    let localSec = 0;
+    let isRunning = true;
+
+    const adapter = new GenericSyncAdapter(engine, clock, {
+      onSeek: (pos) => { localSec = pos; updateSlideUI(); },
+      onSetRate: () => {},
+      onPlay: () => { isRunning = true; },
+      getState: () => ({ currentTimeSec: localSec, isPlaying: isRunning })
+    });
+
+    function updateSlideUI() {
+      const current = slides.slice().reverse().find(s => localSec >= s.sec) || slides[0];
+      document.getElementById('slide-title').innerText = current.title;
+      document.getElementById('slide-desc').innerText = current.desc;
+    }
+
+    engine.setState({
+      isPlaying: true,
+      anchorTimeMs: clock.now(),
+      pausedPositionSec: 0
+    });
+    adapter.start();
+
+    setInterval(() => {
+      if (isRunning) {
+        localSec += 1;
+        updateSlideUI();
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

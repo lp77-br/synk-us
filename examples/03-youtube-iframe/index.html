@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SynkUs - YouTube Adapter Example</title>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</head>
+<body style="background: #0d0d11; color: #fff; font-family: sans-serif; text-align: center; padding: 40px;">
+  <h2>SynkUs: YouTube IFrame Adapter</h2>
+  
+  <div style="display: flex; justify-content: center; margin-top: 20px;">
+    <div id="player"></div>
+  </div>
+
+  <div style="margin-top: 20px; font-family: monospace; color: #a1a1aa; background: #111; padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
+    <div>Expected (Motor): <span id="dbg-expected" style="color: #10b981; font-weight: bold;">0.000</span>s</div>
+    <div>Current (Player): <span id="dbg-current">0.000</span>s</div>
+    <div style="margin-top: 8px; color: #8b5cf6;">Drift: <span id="dbg-drift">0.000</span>s</div>
+  </div>
+
+  <script type="module">
+    import { SyncEngine, SyncClock } from '../../packages/core/dist/index.esm.js';
+    import { YouTubeSyncAdapter } from '../../adapters/youtube/dist/index.esm.js';
+
+    const clock = new SyncClock();
+    const engine = new SyncEngine({ slewMaxDriftSec: 5.0 });
+
+    function initPlayer() {
+      const player = new YT.Player('player', {
+        height: '360',
+        width: '640',
+        videoId: 'M7lc1UVf-VE',
+        playerVars: {
+          mute: 1,
+          playsinline: 1,
+          origin: window.location.origin 
+        },
+        events: {
+          onReady: () => {
+            const adapter = new YouTubeSyncAdapter(player, engine, clock);
+
+            const startTime = clock.now() + 1000;
+            engine.setState({
+              isPlaying: true,
+              anchorTimeMs: startTime,
+              pausedPositionSec: 0
+            });
+
+            adapter.schedulePlay(startTime);
+
+            setInterval(() => {
+              const expected = engine.getTargetPosition(clock.now());
+              const current = player.getCurrentTime() || 0;
+              const drift = expected - current;
+              
+              document.getElementById('dbg-expected').innerText = expected.toFixed(3);
+              document.getElementById('dbg-current').innerText = current.toFixed(3);
+              document.getElementById('dbg-drift').innerText = drift.toFixed(3);
+            }, 100);
+          }
+        }
+      });
+    }
+
+    if (window.YT && window.YT.Player) {
+      initPlayer();
+    } else {
+      window.onYouTubeIframeAPIReady = initPlayer;
+    }
+  </script>
+</body>
+</html>

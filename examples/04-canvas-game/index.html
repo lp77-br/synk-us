@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SynkUs - Generic Canvas Loop</title>
+</head>
+<body style="background: #000; color: #fff; font-family: sans-serif; text-align: center; padding: 20px;">
+  <h2>SynkUs: Synchronized Canvas Animation</h2>
+  <canvas id="canvas" width="600" height="200" style="border: 1px solid #333; border-radius: 8px;"></canvas>
+
+  <script type="module">
+    import { SyncEngine, SyncClock } from '../../packages/core/dist/index.esm.js';
+    import { GenericSyncAdapter } from '../../adapters/generic/dist/index.esm.js';
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const clock = new SyncClock();
+    const engine = new SyncEngine();
+
+    let localTimelineSec = 0;
+    let playbackSpeed = 1.0;
+    let running = true;
+
+    const adapter = new GenericSyncAdapter(engine, clock, {
+      onSeek: (pos) => { localTimelineSec = pos; },
+      onSetRate: (rate) => { playbackSpeed = rate; },
+      onPlay: () => { running = true; },
+      getState: () => ({ currentTimeSec: localTimelineSec, isPlaying: running })
+    });
+
+    engine.setState({
+      isPlaying: true,
+      anchorTimeMs: clock.now(),
+      pausedPositionSec: 0
+    });
+    adapter.start();
+
+    let lastTick = performance.now();
+    function loop(t) {
+      const delta = (t - lastTick) / 1000;
+      lastTick = t;
+
+      if (running) localTimelineSec += delta * playbackSpeed;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const x = (localTimelineSec * 80) % canvas.width;
+      ctx.fillStyle = '#8b5cf6';
+      ctx.beginPath();
+      ctx.arc(x, 100, 20, 0, Math.PI * 2);
+      ctx.fill();
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
