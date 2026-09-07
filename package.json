@@ -1,12 +1,30 @@
-node_modules/
-package-lock.json
-
-dist/
-*.tsbuildinfo
-
-.DS_Store
-Thumbs.db
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+{
+  "name": "synk-us",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deterministic timeline synchronization suite for web clients",
+  "workspaces": [
+    "packages/*",
+    "adapters/*"
+  ],
+  "scripts": {
+    "build:cjs": "npm run --workspaces --if-present build",
+    "build:esm": "npx esbuild packages/core/src/index.ts --bundle --format=esm --outfile=packages/core/dist/index.esm.js && npx esbuild adapters/youtube/src/index.ts --bundle --format=esm --outfile=adapters/youtube/dist/index.esm.js && npx esbuild adapters/html5/src/index.ts --bundle --format=esm --outfile=adapters/html5/dist/index.esm.js && npx esbuild adapters/generic/src/index.ts --bundle --format=esm --outfile=adapters/generic/dist/index.esm.js",
+    "build": "npm run build:cjs && npm run build:esm",
+    "test": "node packages/core/test.js"
+  },
+  "keywords": [
+    "sync",
+    "timeline",
+    "realtime",
+    "youtube-sync",
+    "audio-sync",
+    "drift-correction"
+  ],
+  "author": "lp77-br",
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "typescript": "^5.0.0"
+  }
+}
