@@ -5,7 +5,14 @@ Deterministic timeline synchronization suite for multi-client web environments.
 
 [![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/anajUFDRR5)
 [![License: MIT](https://img.shields.io/badge/License-MIT-violet.svg)](LICENSE)
+[![Status: Beta](https://img.shields.io/badge/Status-Beta%20%2F%20As--Is-orange.svg)](https://github.com/lp77-br/synk-us)
 [![Release](https://img.shields.io/github/v/release/lp77-br/synk-us?color=emerald)](https://github.com/lp77-br/synk-us/releases)
+
+---
+
+> ⚠️ **Project Status / Status do Projeto**  
+> **EN:** This library is currently in **Beta (v0.1.0)**. It is provided **"as-is"** and is **not actively maintained with regular updates**. It is stable for personal and community setups, but feel free to fork, customize, or submit pull requests.  
+> **PT-BR:** Esta biblioteca encontra-se em estágio **Beta (v0.1.0)**. O projeto é fornecido **"como está" (as-is)** e **não recebe atualizações frequentes ou manutenção ativa**. Encontra-se funcional para uso próprio e comunitário, mas sinta-se livre para criar forks e adaptar conforme sua necessidade.
 
 ---
 
@@ -24,8 +31,8 @@ SynkUs delivers sub-second time calibration and drift correction across multiple
 The engine continuously compares current player time against calibrated timeline targets:
 1. **Deadband (< 0.15s):** Discrepancies below 150ms are ignored to prevent audio micro-stutters and buffer thrashing.
 2. **Clock Slewing (0.2s - 5.0s):**
-   * **Small drift (0.2s - 2.0s):** Playback rate shifts to `1.25x` (or `0.75x`) to eliminate drift seamlessly.
-   * **Medium drift (2.0s - 5.0s):** Playback rate shifts to `1.5x` (or `0.5x`), cutting recovery duration by half.
+   * **Small drift (0.2s to 2.0s):** Playback rate shifts to `1.25x` (or `0.75x`) to eliminate drift seamlessly.
+   * **Medium drift (2.0s to 5.0s):** Playback rate shifts to `1.5x` (or `0.5x`), cutting recovery duration by half.
 3. **Hard Seek (> 5.0s):** Triggers an immediate seek with an 8-second cooldown lock to stop seeking loops during stalls.
 
 ### Quickstart (Pre-built Release)
@@ -78,7 +85,7 @@ O SynkUs oferece calibração de tempo em subsegundos e correção automática d
 
 ## 💬 Community & Support
 
-Dúvidas, sugestões ou suporte sobre integração com WebSockets e players:
+Dúvidas ou discussões sobre o projeto:
 
 👉 **[Entrar no Servidor do Discord](https://discord.gg/anajUFDRR5)**
 
