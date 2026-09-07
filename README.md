@@ -5,7 +5,6 @@ Deterministic timeline synchronization suite for multi-client web environments.
 
 [![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/anajUFDRR5)
 [![License: MIT](https://img.shields.io/badge/License-MIT-violet.svg)](LICENSE)
-[![Status: Beta](https://img.shields.io/badge/Status-Beta%20%2F%20As--Is-orange.svg)](https://github.com/lp77-br/synk-us)
 [![Release](https://img.shields.io/github/v/release/lp77-br/synk-us?color=emerald)](https://github.com/lp77-br/synk-us/releases)
 
 ---
